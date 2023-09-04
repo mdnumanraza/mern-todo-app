@@ -8,7 +8,7 @@ const morgan = require("morgan");
 
 // config .env file  always keep .env above all since using variables from it
 dotenv.config();
-const MONGO_URL = mongodb+srv://numan71417:numan@cluster0.yzcfbgx.mongodb.net/todo-app
+
 // rest object 
 const app = express();
 
