@@ -6,7 +6,7 @@ import add from './assets/add.png'
 
 const App = () => {
 
-  const apiurl = "http://localhost:8001/api/v1/todos";
+  const apiurl = "http://localhost:8001/api/v1/todos/";
 
   const date = new Date();
   const dt ={
@@ -14,64 +14,65 @@ const App = () => {
     m : date.getMonth(),
     y : date.getFullYear()
 }
-
-
   const [todo, setTodo] = useState([]);
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState('');
+  // const [style,setStyle]=useState('')
+  const [category,setCategory]=useState('Normal')
 
   const [checked, setChecked] = useState([]);
-  // const styles = { textDecorationLine: checked ? "line-through" : "none" };
-  // const handlecheck = () => setChecked(!checked);
 
 // Add/Remove checked item from list
-const handlecheck = (event) => {
-  var updatedList = [...checked];
-  if (event.target.checked) {
-    updatedList = [...checked, event.target.value];
-  } else {
-    updatedList.splice(checked.indexOf(event.target.value), 1);
-  }
-  setChecked(updatedList);
-};
+  const handlecheck = (event) => {
+    var updatedList = [...checked];
+    if (event.target.checked) {
+      updatedList = [...checked, event.target.value];
+    } else {
+      updatedList.splice(checked.indexOf(event.target.value), 1);
+    }
+    setChecked(updatedList);
+  };
+  var isChecked = (title) =>
+  checked.includes(title) ? "line-through" : "none";
 
-// const checkedItems = checked.length
-//     ? checked.reduce((total, item) => {
-//         return total + ", " + item;
-//       })
-//     : "";
-
-    var isChecked = (title) =>
-    checked.includes(title) ? "line-through" : "none";
-
-  const submitHandler = async(e)=>{
+  //****************fuction to add new todo*******************************
+const submitHandler = async(e)=>{
     e.preventDefault();
-    const todoData = title
+  
+    //create object to send data
+    const todoData = {
+      title,
+      category, 
+    };
 
     try{
+      //post api
       const response = await fetch(apiurl, {
         method:'POST',
-        body : JSON.stringify(todoData)
+        body : JSON.stringify(todoData),
+        headers:{
+          'Content-Type': 'application/json',
+        }
       })
-
+     
       const json = await response.json();
       console.log(json);
       if(!response.ok){
-        alert("Enter todo");
-        setEmptyFields(json.emptyFields)
+        alert("Enter todo.. ");
+        setTitle('')
       }
 
       if(response.ok){
         setTitle('')
-        setEmptyFields([])
         alert("Added Successfully");
       }
+      
     }catch (error) {
-      toast.error(error);
       console.log(error);
   }
 }
 
-// fetching data from db
+
+// ********************fetching data from db***************************
 useEffect( ()=>{
   const fetchtodos = async()=>{
     try{
@@ -80,6 +81,7 @@ useEffect( ()=>{
 
       if(response.ok){
         setTodo(json);
+        
       }
     } catch (error) {
       console.log(error);
@@ -88,17 +90,46 @@ useEffect( ()=>{
   fetchtodos();
 },[])
 
+//************************delete todo***************************/
+const handleDelete = async (id) => {
+  
+  try {
+    //fetching api to delete by id
+    const response = await fetch(apiurl + id, {
+      method: "DELETE",
+      headers: {
+        'Content-type': 'application/json',
+      },
+    });
+
+    const json = await response.json();
+    if (response.ok) {
+      alert(`successfully deleted`);
+      
+      // Remove the deleted todo from the state
+      setTodo(
+        (prevTodos) => {
+            prevTodos.filter((todo) => todo._id !== id)
+        }    
+        );
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 
   return (
     <div className="body">
-      <div className="header">
+
+  <div className="header downAnimation">
         <h1>Tasks Manager</h1>
         <div className="date">Date: 
         {dt.d}/{dt.m+1}/{dt.y} 
         </div>
-      </div>
+  </div>
 
-  <div className="todo-container" >
+  <div className="todo-container upanimation" >
 
     {todo && todo.map((todo)=>(
       <div className="todo" key={todo._id}>
@@ -114,37 +145,53 @@ useEffect( ()=>{
             addSuffix: true,
           })}
           </div>
+          <div >
+            <span className={`${todo.category} tag`}>
+            {todo.category}
+            </span>
+            </div>
         </div>
-        <button className="delete">
-          <img
-            alt="svgImg"
-            src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIKc3R5bGU9ImZpbGw6I0ZBNTI1MjsiPgo8cGF0aCBkPSJNIDEwLjgwNjY0MSAyIEMgMTAuMjg5NjQxIDIgOS43OTU2ODc1IDIuMjA0MzEyNSA5LjQyOTY4NzUgMi41NzAzMTI1IEwgOSAzIEwgNCAzIEEgMS4wMDAxIDEuMDAwMSAwIDEgMCA0IDUgTCAyMCA1IEEgMS4wMDAxIDEuMDAwMSAwIDEgMCAyMCAzIEwgMTUgMyBMIDE0LjU3MDMxMiAyLjU3MDMxMjUgQyAxNC4yMDUzMTIgMi4yMDQzMTI1IDEzLjcxMDM1OSAyIDEzLjE5MzM1OSAyIEwgMTAuODA2NjQxIDIgeiBNIDQuMzY1MjM0NCA3IEwgNS44OTI1NzgxIDIwLjI2MzY3MiBDIDYuMDI0NTc4MSAyMS4yNTM2NzIgNi44NzcgMjIgNy44NzUgMjIgTCAxNi4xMjMwNDcgMjIgQyAxNy4xMjEwNDcgMjIgMTcuOTc0NDIyIDIxLjI1NDg1OSAxOC4xMDc0MjIgMjAuMjU1ODU5IEwgMTkuNjM0NzY2IDcgTCA0LjM2NTIzNDQgNyB6Ij48L3BhdGg+Cjwvc3ZnPg=="
-          />
+        <button className="delete" onClick={() => handleDelete(todo._id)}>
+            ❌
         </button>
+
       </div>
     ))}
 
   </div>
  
-
-      <div className="footer">
+      <form className="footer" onSubmit={submitHandler} >
         <div className="input">
           <input
             type="text"
             name="input"
+            className="input"
             placeholder="Start writing..."
-            value={title}
             onChange={(e)=>{
               setTitle(e.target.value);
             }}
-           
+            value={title}   
           />
-        </div>
+      </div>
+
+      <div className="category">
+      <select
+        name="category"
+        onChange={(e) => {
+          setCategory(e.target.value);
+        }}
+        value={category}
+      >
+        <option value="SSR">SSR</option>
+        <option value="SR">SR</option>
+        <option value="R">R</option>
+        <option value="Normal">Normal</option>
+    </select>
+
+     </div>
+
         <div className="addbtn">
-          <button 
-          className="add"
-          onSubmit={submitHandler}
-          >
+          <button className="add" type='submit' >
             {" "}
             <img src={add}
               width="50"
@@ -153,7 +200,7 @@ useEffect( ()=>{
             />{" "}
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

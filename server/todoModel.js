@@ -4,7 +4,15 @@ const Schema = mongoose.Schema
 
 const todoSchema = new Schema(
     {
-        title: String,
+        title: {
+            type:String,
+            required:true
+        },
+        category: {
+            type:String,
+            required:true
+        }
+       
 
     }, {timestamps:true}
 )

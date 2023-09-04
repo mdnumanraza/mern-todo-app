@@ -24,9 +24,9 @@ const getTodo = async(req, res)=>{
 
 //Create todo
 const createTodo = async(req, res)=>{
-    const {title} = req.body;
+    const {title,category} = req.body;
     try{
-        const todoData = await todo.create({title});
+        const todoData = await todo.create({title,category});
         res.status(200).json(todoData);
     }catch (error) {
         res.status(400).json({error})

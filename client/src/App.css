@@ -6,10 +6,12 @@
   margin: 0;
   padding: 0;
 }
+
 body{
   background: rgb(13,1,37);
 background: linear-gradient(90deg, rgba(13,1,37,1) 0%, rgba(3,58,91,1) 53%, rgba(8,0,47,1) 100%);
 }
+
 .body{
   color: #fff;
   margin-top: 20px;
@@ -26,6 +28,7 @@ background: linear-gradient(90deg, rgba(13,1,37,1) 0%, rgba(3,58,91,1) 53%, rgba
 }
 .line-through{
   text-decoration: line-through;
+  color: rgba(172, 167, 167, 0.801);
 }
 .none{
   text-decoration: none;
@@ -94,7 +97,9 @@ input[type="checkbox"]:checked::before {
   transform: scale(1);
 }
 
-
+.delete:hover{
+  scale: 1.5;
+}
 
 button{
   outline: none;
@@ -113,16 +118,17 @@ button{
   margin-top: 4px;
   font-size: 0.8rem;
   font-family: 'Nunito', sans-serif;
+  margin-bottom: 5px;
 }
 
 .todo-container{
-  background: rgb(37,0,105);
-  background: radial-gradient(circle, rgba(37,0,105,1) 0%, rgba(9,9,121,1) 36%, rgba(23,6,102,1) 65%, rgba(3,73,115,1) 100%);
   color: #fff;
   padding: 10px 5px;
   display: flex;
   flex-direction: column;
   border-radius: 0.8rem;
+  background: rgb(37,0,105);
+  background: radial-gradient(circle, rgba(37,0,105,1) 0%, rgba(9,9,121,1) 36%, rgba(23,6,102,1) 65%, rgba(3,73,115,1) 100%);
 }
 
 
@@ -133,6 +139,40 @@ button{
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+}
+
+.tag{
+  display: block;
+  width: fit-content;
+  margin-top: 5px;
+  outline: #fff;
+  
+}
+
+.SSR{
+  background-color: rgb(196, 166, 0);
+  border-radius: 5px;
+  padding: 5px;
+  box-shadow: 3px 1px 8px 1px #E6B200;
+}
+.SR{
+  background-color: rgb(109, 0, 172);
+  border-radius: 5px;
+  padding: 5px;
+  box-shadow: 0.5px 0.2px 5px 1px rgb(189, 118, 230);
+  border: 1px solid rgba(112, 185, 182, 0.863);
+}
+.R{
+  background-color: rgb(0, 177, 118);
+  border-radius: 5px;
+  padding: 5px;
+
+}
+.Normal{
+  background-color: rgb(87, 52, 0);
+  border-radius: 5px;
+  padding: 5px;
+
 }
 
 .footer{
@@ -148,19 +188,29 @@ button{
 
 .footer input{
   padding: 5px 7px;
-  width: 280px;
+  width: 200px;
   height: 40px;
   border: none;
   outline: none;
-  background: rgba(255, 255, 255, 0.699);
-  border-radius: 20px;
-  
+  background: rgb(84, 48, 243);
+  border-radius: 20px; 
 }
-.input{
-  border-bottom: 1px solid black;
-  background: none;
-  padding: 5px 7px;
 
+.footer input::placeholder{
+  color: #fff;
+  font-weight: 500;
+  font-family: 'Manrope', sans-serif;
+  letter-spacing: 0.03rem;
+}
+
+
+.input{
+  /* border-bottom: 1px solid black; */
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  font-family: 'Manrope', sans-serif;
+  letter-spacing: 0.05rem;
 }
 
 .addbtn button{
@@ -170,7 +220,79 @@ button{
   cursor: pointer;
   height: 40px;
 }
+
+.addbtn button:hover{
+  animation: myAnim 2s linear 0s infinite normal forwards;
+  scale: 1.2;
+}
+
+@keyframes myAnim {
+	0% {
+		transform: rotate(0);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
 button img{
   height: 40px;
   width: 40px;
 }
+
+/* down animation */
+.upanimation{
+  animation: up 1s ease 0s 1 normal forwards;
+}
+
+@keyframes up {
+	0% {
+		opacity: 0;
+		transform: translateY(250px);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+
+/* down animation */
+.downAnimation{
+  animation: down 1s ease 0s 1 normal forwards;
+}
+
+@keyframes down {
+	0% {
+		opacity: 0;
+		transform: translateY(-250px);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.category select{
+    outline: none;
+    padding: 4px;
+    border-radius: 1.3rem;
+    margin-right: 3px;
+    margin-left: 4px;
+    background-color:rgb(115, 59, 248);
+    font-weight: 600;
+    color: white;
+  }
+  
+  .category select:hover{
+    color: white;
+    scale: 1.1;
+    border-radius: 1.3rem;
+    background-color: rgb(76, 0, 255);
+    outline: none;
+}
+
+
