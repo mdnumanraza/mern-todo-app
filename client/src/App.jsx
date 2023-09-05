@@ -65,7 +65,7 @@ const submitHandler = async(e)=>{
         setTitle('')
         alert("Added Successfully");
       }
-      
+      fetchtodos();
     }catch (error) {
       console.log(error);
   }
@@ -73,8 +73,7 @@ const submitHandler = async(e)=>{
 
 
 // ********************fetching data from db***************************
-useEffect( ()=>{
-  const fetchtodos = async()=>{
+    const fetchtodos = async()=>{
     try{
       const response = await fetch(apiurl);
       const json = await response.json();
@@ -87,8 +86,7 @@ useEffect( ()=>{
       console.log(error);
     }
   }
-  fetchtodos();
-},[])
+useEffect( ()=>{ fetchtodos();},[])
 
 //************************delete todo***************************/
 const handleDelete = async (id) => {
@@ -113,6 +111,7 @@ const handleDelete = async (id) => {
         }    
         );
     }
+    fetchtodos();
   } catch (error) {
     console.log(error);
   }
