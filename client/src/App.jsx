@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import add from './assets/add.png'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // import info from '../info'
 
 const App = () => {
@@ -57,13 +59,15 @@ const submitHandler = async(e)=>{
       const json = await response.json();
       console.log(json);
       if(!response.ok){
-        alert("Enter todo.. ");
+        // alert("Enter todo.. ");
+         toast.error("You didn't add any task");
         setTitle('')
       }
 
       if(response.ok){
         setTitle('')
-        alert("Added Successfully");
+        // alert("Added Successfully");
+        toast.success("Task added successfully");
       }
       fetchtodos();
     }catch (error) {
@@ -102,7 +106,8 @@ const handleDelete = async (id) => {
 
     const json = await response.json();
     if (response.ok) {
-      alert(`successfully deleted`);
+      // alert(`successfully deleted`);
+        toast.warn("Task deleted successfully");
       
       // Remove the deleted todo from the state
       setTodo(
@@ -120,7 +125,7 @@ const handleDelete = async (id) => {
 
   return (
     <div className="body">
-
+ <ToastContainer />
   <div className="header downAnimation">
         <h1>Tasks Manager</h1>
         <div className="date">Date: 
