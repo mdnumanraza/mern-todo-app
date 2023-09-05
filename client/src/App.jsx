@@ -6,7 +6,7 @@ import add from './assets/add.png'
 
 const App = () => {
 
-  const apiurl = "http://localhost:8001/api/v1/todos/";
+  const apiurl = "https://mern-todo-app-backend-five.vercel.app/api/v1/todos/";
 
   const date = new Date();
   const dt ={
