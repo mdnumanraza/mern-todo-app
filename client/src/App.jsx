@@ -166,6 +166,23 @@ const handleDelete = async (id) => {
   </div>
  
       <form className="footer" onSubmit={submitHandler} >
+
+      <div className="category">
+      <select
+        name="category"
+        onChange={(e) => {
+          setCategory(e.target.value);
+        }}
+        value={category}
+      >
+        <option value="SSR">SSR</option>
+        <option value="SR">SR</option>
+        <option value="R">R</option>
+        <option value="Normal">Normal</option>
+    </select>
+
+     </div>
+
         <div className="input">
 
         <InputEmoji
@@ -175,6 +192,7 @@ const handleDelete = async (id) => {
               onChange={ setTitle}
               // cleanOnEnter
               // onEnter={ }
+              height={50}
               buttonElement
               fontFamily={'Manrope'}
               placeholder="Start writing..."
@@ -192,22 +210,6 @@ const handleDelete = async (id) => {
           /> */}
         
       </div>
-
-      <div className="category">
-      <select
-        name="category"
-        onChange={(e) => {
-          setCategory(e.target.value);
-        }}
-        value={category}
-      >
-        <option value="SSR">SSR</option>
-        <option value="SR">SR</option>
-        <option value="R">R</option>
-        <option value="Normal">Normal</option>
-    </select>
-
-     </div>
 
         <div className="addbtn">
           <button className="add" type='submit' >
