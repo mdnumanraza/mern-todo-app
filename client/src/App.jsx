@@ -4,7 +4,8 @@ import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import add from './assets/add.png'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// import info from '../info'
+// import EmojiPicker from 'emoji-picker-react';
+import InputEmoji from 'react-input-emoji'
 
 const App = () => {
 
@@ -166,7 +167,20 @@ const handleDelete = async (id) => {
  
       <form className="footer" onSubmit={submitHandler} >
         <div className="input">
-          <input
+
+        <InputEmoji
+              name="input"
+              className="input"
+              value={title}
+              onChange={ setTitle}
+              // cleanOnEnter
+              // onEnter={ }
+              buttonElement
+              fontFamily={'Manrope'}
+              placeholder="Start writing..."
+        />
+
+          {/* <input
             type="text"
             name="input"
             className="input"
@@ -175,7 +189,8 @@ const handleDelete = async (id) => {
               setTitle(e.target.value);
             }}
             value={title}   
-          />
+          /> */}
+        
       </div>
 
       <div className="category">
@@ -204,7 +219,10 @@ const handleDelete = async (id) => {
             />{" "}
           </button>
         </div>
+        
       </form>
+
+    
     </div>
   );
 };

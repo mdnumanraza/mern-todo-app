@@ -210,6 +210,7 @@ button{
   font-weight: 500;
   font-family: 'Manrope', sans-serif;
   letter-spacing: 0.05rem;
+  width: 200px;
 }
 
 .addbtn button{
@@ -283,4 +284,13 @@ button img{
     outline: none;
 }
 
+.react-input-emoji--container{
+  background-color: none !important;
+}
+.react-input-emoji--button svg{
+  fill: rgb(222, 217, 233) !important;
+}
+.react-input-emoji--button svg:hover{
+  fill: rgb(148, 0, 233) !important;
+}
 
