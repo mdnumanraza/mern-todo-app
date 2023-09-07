@@ -1,13 +1,15 @@
 const express = require('express');
+// router object 
+const router = express.Router();
+
 const { createTodo, 
         getTodos, 
         getTodo, 
         deleteTodo, 
-        updateTodo
+        updateTodo,
+        uploadImg
 } = require('./controller');
 
-// router object 
-const router = express.Router();
 
 //Get method all
 router.get('/',getTodos);
@@ -17,6 +19,7 @@ router.get('/:id',getTodo);
 
 //Create todo
 router.post('/',createTodo);
+
 
 //Delete todo
 router.delete('/:id',deleteTodo);

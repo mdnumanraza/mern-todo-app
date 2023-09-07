@@ -1,26 +1,35 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
-import add from './assets/add.png'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // import EmojiPicker from 'emoji-picker-react';
 import InputEmoji from 'react-input-emoji'
+import add from './assets/add.png'
+import camera from './assets/camera.png'
+import deletebtn from './assets/delete.png'
+import firebase from 'firebase/compat/app'
+import 'firebase/compat/storage'
+
+
 
 const App = () => {
 
-  const apiurl = "https://mern-todo-app-backend-five.vercel.app/api/v1/todos/";
+  // const apiurl = "https://mern-todo-app-backend-five.vercel.app/api/v1/todos/";
+  const apiurl = "http://localhost:8001/api/v1/todos/";
+  const noimg = "https://firebasestorage.googleapis.com/v0/b/add-images-b4898.appspot.com/o/giffffff.gif?alt=media&token=34fd337a-ac8a-403e-a1eb-b700857e91a8"
 
   const date = new Date();
   const dt ={
     d : date.getDate(),
     m : date.getMonth(),
-    y : date.getFullYear()
+    y : date.getFullYear(),
 }
   const [todo, setTodo] = useState([]);
   const [title, setTitle] = useState('');
   // const [style,setStyle]=useState('')
-  const [category,setCategory]=useState('Normal')
+  const [image, setImg]= useState(noimg);
+  const [category,setCategory]=useState('⚫')
 
   const [checked, setChecked] = useState([]);
 
@@ -37,14 +46,35 @@ const App = () => {
   var isChecked = (title) =>
   checked.includes(title) ? "line-through" : "none";
 
+
+ const handleupload = async(e)=>{
+    const selectedFile = e.target.files[0];
+    if(selectedFile){
+      const storageRef =  firebase.storage().ref()
+      const fileRef = storageRef.child(selectedFile.name)
+
+      await fileRef.put(selectedFile)
+      .then((snapshot)=>{
+        snapshot.ref.getDownloadURL()
+        .then((downloadURL)=>{
+          console.log(downloadURL);
+          setImg(downloadURL)
+        })
+      })
+    }else{
+      toast.error("Please select image to upload")
+    }
+ }
+
   //****************fuction to add new todo*******************************
 const submitHandler = async(e)=>{
     e.preventDefault();
-  
+
     //create object to send data
     const todoData = {
       title,
-      category, 
+      category,
+      image, 
     };
 
     try{
@@ -61,12 +91,17 @@ const submitHandler = async(e)=>{
       console.log(json);
       if(!response.ok){
         // alert("Enter todo.. ");
-         toast.error("You didn't add any task");
+         toast.error("Please write a task..");
         setTitle('')
+        // setImg('https://media.tenor.com/qrkH_HRRRmgAAAAC/ashish-chanchlani.gif')
+     
       }
 
       if(response.ok){
         setTitle('')
+       
+       
+      
         // alert("Added Successfully");
         toast.success("Task added successfully");
       }
@@ -75,6 +110,9 @@ const submitHandler = async(e)=>{
       console.log(error);
   }
 }
+
+// *********** Image upload func ******************
+
 
 
 // ********************fetching data from db***************************
@@ -85,7 +123,7 @@ const submitHandler = async(e)=>{
 
       if(response.ok){
         setTodo(json);
-        
+        setImg(noimg);
       }
     } catch (error) {
       console.log(error);
@@ -132,18 +170,27 @@ const handleDelete = async (id) => {
         <div className="date">Date: 
         {dt.d}/{dt.m+1}/{dt.y} 
         </div>
+
   </div>
+
 
   <div className="todo-container upanimation" >
 
     {todo && todo.map((todo)=>(
-      <div className="todo" key={todo._id}>
+      <div className="card" key={todo._id}>
+  
+      <div className="img">
+          <img src={todo.image} alt="img" />
+      </div>
+
+      <div className="todo" >
         <div className="check">
           <input type="checkbox" name="check" onChange={handlecheck}
           value={todo._id}
           />
-        </div>
-        <div className="desc">
+      </div>
+
+      <div className="desc">
           <div className={`title ${isChecked(todo._id)}`}>{todo.title}</div>
           <div className="time">
             {formatDistanceToNow(new Date(todo.updatedAt), {
@@ -155,11 +202,13 @@ const handleDelete = async (id) => {
             {todo.category}
             </span>
             </div>
-        </div>
-        <button className="delete" onClick={() => handleDelete(todo._id)}>
-            ❌
-        </button>
+      </div>
 
+      <button className="delete" onClick={() => handleDelete(todo._id)}>
+          <img src={deletebtn} alt="" height='30px' />
+      </button>
+          
+      </div>
       </div>
     ))}
 
@@ -168,22 +217,39 @@ const handleDelete = async (id) => {
       <form className="footer" onSubmit={submitHandler} >
 
       <div className="category">
+          <span style={{marginLeft:"6px", color:"rgb(115, 59, 248)",fontFamily:"Manrope", fontWeight:"650"}}>Tag</span> 
       <select
+
         name="category"
         onChange={(e) => {
           setCategory(e.target.value);
         }}
         value={category}
-      >
-        <option value="SSR">SSR</option>
-        <option value="SR">SR</option>
-        <option value="R">R</option>
-        <option value="Normal">Normal</option>
+        >
+        <option value="🌟🌟🌟">🌟🌟🌟</option>
+        <option value="⭐⭐">⭐⭐</option>
+        <option value="⭐">⭐</option>
+        <option value="⚫">⚫</option>
     </select>
 
+
+     </div>
+     
+     <div className="img-input">
+        <label> <img src={camera } alt="" width='30px' height='30px' />
+          <input 
+            type="file" 
+            name="image"  
+            text='muted' 
+            style={{display:"none"}}
+            onChange={handleupload}
+            
+           
+          />
+        </label>
      </div>
 
-        <div className="input">
+      <div className="input">
 
         <InputEmoji
               name="input"
@@ -222,8 +288,18 @@ const handleDelete = async (id) => {
           </button>
         </div>
         
-      </form>
+        {/* add images using paste link */}
+          {/* <div className="img">
+            <input 
+              type="text" 
+              placeholder="enter link here" 
+              onChange={(e)=>{setImg(e.target.value)}}
+              value={image} 
+              required={true}
+            />
+          </div> */}
 
+      </form>
     
     </div>
   );

@@ -24,14 +24,15 @@ const getTodo = async(req, res)=>{
 
 //Create todo
 const createTodo = async(req, res)=>{
-    const {title,category} = req.body;
+    const {title,category,image} = req.body;
     try{
-        const todoData = await todo.create({title,category});
+        const todoData = await todo.create({title,category,image});
         res.status(200).json(todoData);
     }catch (error) {
         res.status(400).json({error})
     }
 }
+
 
 // delete a Todo /:id
 const deleteTodo = async (req, res)=>{
@@ -59,4 +60,5 @@ module.exports = {createTodo,
     getTodos, 
     getTodo, 
     deleteTodo, 
-    updateTodo}
+    updateTodo,
+ }
