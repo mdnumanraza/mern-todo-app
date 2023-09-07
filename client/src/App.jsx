@@ -17,7 +17,8 @@ const App = () => {
 
   // const apiurl = "https://mern-todo-app-backend-five.vercel.app/api/v1/todos/";
   const apiurl = "http://localhost:8001/api/v1/todos/";
-  const noimg = "https://firebasestorage.googleapis.com/v0/b/add-images-b4898.appspot.com/o/giffffff.gif?alt=media&token=34fd337a-ac8a-403e-a1eb-b700857e91a8"
+  const noimg = "https://firebasestorage.googleapis.com/v0/b/add-images-b4898.appspot.com/o/giffffff.gif?alt=media&token=34fd337a-ac8a-403e-a1eb-b700857e91a8";
+  const loadgif = 'https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif';
 
   const date = new Date();
   const dt ={
@@ -29,6 +30,7 @@ const App = () => {
   const [title, setTitle] = useState('');
   // const [style,setStyle]=useState('')
   const [image, setImg]= useState(noimg);
+  const [load, setLoad]= useState(add);
   const [category,setCategory]=useState('⚫')
 
   const [checked, setChecked] = useState([]);
@@ -58,7 +60,8 @@ const App = () => {
         snapshot.ref.getDownloadURL()
         .then((downloadURL)=>{
           console.log(downloadURL);
-          setImg(downloadURL)
+          setImg(downloadURL);
+          setLoad(add);
         })
       })
     }else{
@@ -104,6 +107,7 @@ const submitHandler = async(e)=>{
       
         // alert("Added Successfully");
         toast.success("Task added successfully");
+        
       }
       fetchtodos();
     }catch (error) {
@@ -243,6 +247,7 @@ const handleDelete = async (id) => {
             text='muted' 
             style={{display:"none"}}
             onChange={handleupload}
+            onClick={()=>{setLoad(loadgif)}}
             
            
           />
@@ -280,7 +285,7 @@ const handleDelete = async (id) => {
         <div className="addbtn">
           <button className="add" type='submit' >
             {" "}
-            <img src={add}
+            <img src={load}
               width="50"
               height="50"
               alt="add--v2"
