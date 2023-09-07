@@ -195,9 +195,10 @@ button{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  bottom: 0px;
+  bottom: 18px;
   position: sticky;
   margin-top: 6px;
+	
   background-color: #ccabf1;
   border-radius: 20px;
 
